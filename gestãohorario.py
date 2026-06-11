@@ -60,7 +60,7 @@ while opcao != 0:
             print(cor_do_terminal+"║                                                                            ║"+reset)
             print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
 
-            nome = input("\tDigite o nome do professor:  ")    
+            nome = input("\tDigite o nome do professor: ")    
             print()
             data_nasc = input('\tDigite a sua data de nascimento(xx/xx/xxxx): ')
             print()
@@ -69,7 +69,19 @@ while opcao != 0:
             email = input("\tDigite o email do professor: ")
             print()
             disciplina = input("\tDigite a disciplina que irá lecionar: ")
+            print()
+            qntd_turmas = int(input('\tDigite quantas turmas irá lecionar: '))
+
             professores[nome] = [nome, data_nasc, telefone, email, disciplina]
+            for j in range(qntd_turmas):
+                turma = input('Digite a turma: ')
+                if turma in serie:
+                    serie[turma]['professores'].append(professores[nome])
+                    print()
+                    print('Essa é a lista de profesores do {}: {}'.format(turma, serie[turma]['professores']))
+                else: 
+                    print('Não temos o {} cadastrado nas turmas'.format(turma))
+            
             print()
             print(professores)
             print()
@@ -187,7 +199,7 @@ while opcao != 0:
 
             print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
             print(cor_do_terminal+"║                                                                            ║"+reset)
-            print(cor_do_terminal+"║                     VERIFICAÇÃO DE HORÁRIOS CONCLUÍDA                      ║"+reset)
+            print(cor_do_terminal+"║                     VERIFICAÇÃO DE TURMAS CONCLUÍDA                      ║"+reset)
             print(cor_do_terminal+"║                                                                            ║"+reset)
             print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
             
@@ -249,9 +261,21 @@ while opcao != 0:
                 print(alunos)
                 if turma in serie:
                     serie[turma]['alunos'].append([nome_aluno, data_nasc, email])
-                    print('Aluno cadastrado com sucesso')
                     print()
-                    print(serie[turma])
+                    print(serie[turma]['alunos'])
+                    print()
+                    print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
+                    print(cor_do_terminal+"║                                                                            ║"+reset)
+                    print(cor_do_terminal+"║                     ALUNO CADASTRADO COM SUCESSO                           ║"+reset)
+                    print(cor_do_terminal+"║                                                                            ║"+reset)                
+                    print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
+                    print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
+                    print(cor_do_terminal+"║                                                                            ║"+reset)
+                    print(cor_do_terminal+"║                 \u26A0 Atenção! Isso é apenas uma simulação!                    ║"+reset)
+                    print(cor_do_terminal+"║                                                                            ║"+reset)
+                    print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
+                    print()
+                    input("\tAPERTE >ENTER< PARA CONTINUAR ")
                 else:
                     print('\tNão existe essa turma na escola')
             else:
@@ -265,35 +289,89 @@ while opcao != 0:
             print(cor_do_terminal+"║                       ATUALIZAR DADOS DOS ALUNOS                           ║"+reset)
             print(cor_do_terminal+"║                                                                            ║"+reset)
             print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
+
             matricula = input('\tDigite a matrícula do aluno: ').strip()
+            turma = input('\tDigite a turma que o aluno estuda: ').strip()
+            print()
+
             if matricula in alunos:
-                novo_nome = input('\tDigite o novo nome do aluno: ').strip()
-                data_nas = input('\tDigite a nova data de nascimento(xx/xx/xxxx): ').strip()
-                email = input('\tDigite o novo email do aluno: ').strip()
-                alunos[matricula] = [novo_nome, data_nas, email]
-                print(alunos)
-                input("\tAPERTE >ENTER< PARA CONTINUAR ")
+                if turma in serie:
+                    qntd_alunos = len(serie[turma]['alunos'])
+                    
+                    for i in range (qntd_alunos):
+                        if alunos[matricula][0] in serie[turma]['alunos'][i]:
+                            novo_nome = input('\tDigite o novo nome do aluno: ').strip()
+                            data_nas = input('\tDigite a nova data de nascimento(xx/xx/xxxx): ').strip()
+                            email = input('\tDigite o novo email do aluno: ').strip()
+
+                            alunos[matricula] = [novo_nome, data_nas, email]
+                            serie[turma]['alunos'][i] = alunos[matricula]
+                            serie[turma]
+
+                            print()
+                            print(alunos)
+                            print(serie[turma]['alunos'][i])
+                            print()
+                            print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
+                            print(cor_do_terminal+"║                                                                            ║"+reset)
+                            print(cor_do_terminal+"║                       ATUALIZAÇÃO DE DADOS CONCLUÍDA                       ║"+reset)
+                            print(cor_do_terminal+"║                                                                            ║"+reset)                
+                            print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
+                            print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
+                            print(cor_do_terminal+"║                                                                            ║"+reset)
+                            print(cor_do_terminal+"║                 \u26A0 Atenção! Isso é apenas uma simulação!                    ║"+reset)
+                            print(cor_do_terminal+"║                                                                            ║"+reset)
+                            print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
+                            print()
+                            input("\tAPERTE >ENTER< PARA CONTINUAR ")
+
+                    print('\tAluno não cadastrado na série')
+                    input("\tAPERTE >ENTER< PARA CONTINUAR ")
+
+                else: 
+                    print('\tTurma inexistente')
+                    input("\tAPERTE >ENTER< PARA CONTINUAR ")
             else:
                 print('\tNão tem nenhum aluno cadastrado com esse nome')
                 input("\tAPERTE >ENTER< PARA CONTINUAR ")
+
         elif opcao2 == 3:
             print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
             print(cor_do_terminal+"║                                                                            ║"+reset)
             print(cor_do_terminal+"║                            EXCLUSÃO DE ALUNOS                              ║"+reset)
             print(cor_do_terminal+"║                                                                            ║"+reset)
             print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
+            print()
             matricula = input('\tDigite a matrícula do aluno: ').strip()
             turma = input('\tDigite a turma que ele estuda: ').strip()
+
             if matricula in alunos:
-                nome_aluno = alunos[matricula][0]
-                del alunos[matricula]
-                print(alunos)
-                tam = len(serie[turma]['alunos'])
-                for i in range(tam):
-                    if nome_aluno in serie[turma]['alunos'][i]:
-                        del serie[turma]['alunos'][i]
-                        print(serie)
-                        break
+
+                if turma in serie:
+                    tam = len(serie[turma]['alunos'])
+
+                    for i in range(tam):
+                        nome_aluno = alunos[matricula][0]
+                        if nome_aluno in serie[turma]['alunos'][i]:
+                            del alunos[matricula]
+                            print('\tAlunos da escola: {}'.format(alunos))  
+                            del serie[turma]['alunos'][i]
+                            print('\tAlunos do {}: {}'.format(turma, serie[turma]['alunos']))
+                            print()
+
+                            print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
+                            print(cor_do_terminal+"║                                                                            ║"+reset)
+                            print(cor_do_terminal+"║                         EXCLUSÃO DE ALUNO CONCLUÍDA                        ║"+reset)
+                            print(cor_do_terminal+"║                                                                            ║"+reset)                
+                            print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
+                            print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
+                            print(cor_do_terminal+"║                                                                            ║"+reset)
+                            print(cor_do_terminal+"║                 \u26A0 Atenção! Isso é apenas uma simulação!                    ║"+reset)
+                            print(cor_do_terminal+"║                                                                            ║"+reset)
+                            print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
+                            print()
+                            input("\tAPERTE >ENTER< PARA CONTINUAR ")
+                            
                         
                     else:
                         print()
@@ -302,7 +380,7 @@ while opcao != 0:
             else:
                 print()
                 print('\tNão tem esse aluno cadastrado')    
-            input("\tAPERTE >ENTER< PARA CONTINUAR ")
+                input("\tAPERTE >ENTER< PARA CONTINUAR ")
         
         elif opcao2 == 4:
             print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
@@ -422,8 +500,10 @@ while opcao != 0:
                 else:
                     print('\tEssa turma não está cadastrada')
                     input("\tAPERTE >ENTER< PARA CONTINUAR ")
+
             elif opcao3 == 2:
                 turma = input('\tDigite a turma que deseja alterar a sala: ').input()
+
                 if turma in serie:
                     nova_sala = input('\tDigite a nova sala: ').strip()
                     serie[turma]['sala'] = [nova_sala]
@@ -431,6 +511,7 @@ while opcao != 0:
                     print()
                     print(f'\tEssa é a nova sala de aula: {serie[turma]['sala']} ')
                     input("\tAPERTE >ENTER< PARA CONTINUAR ")
+
                 else:
                     print('\tEssa turma não está cadastrada')
                     input("\tAPERTE >ENTER< PARA CONTINUAR ")
@@ -452,12 +533,14 @@ while opcao != 0:
             print(cor_do_terminal+"║                                                                            ║"+reset)
             print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
             turma = input('\tDigite a turma que deseja remover: ').strip()
+
             if turma in serie:
                 del serie[turma]
                 print('\tTurma removida com sucesso')
                 print()
                 print(serie)  
-                input("\tAPERTE >ENTER< PARA CONTINUAR ") 
+                input("\tAPERTE >ENTER< PARA CONTINUAR ")
+
             else:
                 print('\tTurma não existente')
                 input("\tAPERTE >ENTER< PARA CONTINUAR ")
