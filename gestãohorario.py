@@ -226,7 +226,7 @@ while opcao != 0:
                         Arq_series = open('series.txt', 'wb')
                         dump(serie, Arq_series)
                         Arq_series.close() 
-                        
+
                         print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
                         print(cor_do_terminal+"║                                                                            ║"+reset)
                         print(cor_do_terminal+"║                        EXCLUSÃO DE HORÁRIOS CONCLUÍDA                      ║"+reset)
@@ -339,6 +339,14 @@ while opcao != 0:
             turma = input('\tDigite a turma que vai cursar: ').strip()
             print()
 
+            try:
+                Arqalunos = open('Alunos.txt', 'rb')
+                alunos = load(Arqalunos)
+                Arqalunos.close()
+            except:
+                Arqalunos = open('Alunos.txt', 'wb')
+                Arqalunos.close()
+
             if matricula not in alunos:
                 alunos[matricula] = [nome_aluno, data_nasc, email]
                 print('\tEsses são os alunos cadastrados: {}'.format(alunos))
@@ -350,6 +358,14 @@ while opcao != 0:
                 if turma in serie:
                     qntd_alunos = len(serie[turma]['alunos'])
 
+                    try:
+                        Arq_series = open('series.txt', 'rb')
+                        serie = load(Arq_series)
+                        Arq_series.close()
+                    except:
+                        Arq_series = open('series.txt', 'wb')
+                        Arq_series.close()
+            
                     for i in range (qntd_alunos):
                         if nome_aluno != serie[turma]['alunos'][i][0]:
                             serie[turma]['alunos'].append([nome_aluno, data_nasc, email])
@@ -395,6 +411,21 @@ while opcao != 0:
             matricula = input('\tDigite a matrícula do aluno: ').strip()
             turma = input('\tDigite a turma que o aluno estuda: ').strip()
             print()
+
+            try:
+                Arq_series = open('series.txt', 'rb')
+                serie = load(Arq_series)
+                Arq_series.close()
+
+                Arq_alunos = open('Alunos.txt', 'rb')
+                alunos = Arq_alunos
+                Arq_series.close()
+            except:
+                Arq_series = open('series.txt', 'wb')
+                Arq_series.close()
+
+                Arq_alunos = open('Alunos.txt', 'wb')
+                Arq_alunos.close()
 
             if matricula in alunos:
                 if turma in serie:
@@ -455,6 +486,21 @@ while opcao != 0:
             print()
             matricula = input('\tDigite a matrícula do aluno: ').strip()
             turma = input('\tDigite a turma que ele estuda: ').strip()
+
+            try:
+                Arq_series = open('series.txt', 'rb')
+                serie = load(Arq_series)
+                Arq_series.close()
+
+                Arq_alunos = open('Alunos.txt', 'rb')
+                alunos = Arq_alunos
+                Arq_series.close()
+            except:
+                Arq_series = open('series.txt', 'wb')
+                Arq_series.close()
+
+                Arq_alunos = open('Alunos.txt', 'wb')
+                Arq_alunos.close()
 
             if matricula in alunos:
 
@@ -599,9 +645,13 @@ while opcao != 0:
             sala = input('\tDigite a sala da turma: ').strip()
             capacidade = input('\tDigite a capacidade da turma: ').strip()
 
-            Arq_series = open('series.txt', 'rb')
-            serie = load(Arq_series)
-            Arq_series.close()
+            try:
+                Arq_series = open('series.txt', 'rb')
+                serie = load(Arq_series)
+                Arq_series.close()
+            except:
+                Arq_series = open('series.txt', 'wb')
+                Arq_series.close()
 
             if turma not in serie:
                 serie[turma] = {'professores': [], 'alunos': [], 'horários': [], 'capacidade': [capacidade], 'sala': [sala]}
@@ -688,7 +738,7 @@ while opcao != 0:
                     serie[turma]['capacidade'] = [nova_capacidade]
 
                     Arq_series = open('series.txt', 'wb')
-                    serie = load(Arq_series)
+                    dump(serie, Arq_series)
                     Arq_series.close()
 
                     print(f'\tNova capacidade: {serie[turma]['capacidade']}')
@@ -755,9 +805,13 @@ while opcao != 0:
             print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
             turma = input('\tDigite a turma que deseja remover: ').strip()
 
-            Arq_series = open('series.txt', 'rb')
-            serie = load(Arq_series)
-            Arq_series.close()
+            try:
+                Arq_series = open('series.txt', 'rb')
+                serie = load(Arq_series)
+                Arq_series.close()
+            except:
+                Arq_series = open('series.txt', 'wb')
+                Arq_series.close()
             print()
 
             if turma in serie:
@@ -766,6 +820,7 @@ while opcao != 0:
                 Arq_series = open('series.txt', 'wb')
                 dump(serie, Arq_series)
                 Arq_series.close()
+
                 for chave in serie:
                     print('Essas são as turmas atualizadas: {}'.format(serie))  
                     print()
