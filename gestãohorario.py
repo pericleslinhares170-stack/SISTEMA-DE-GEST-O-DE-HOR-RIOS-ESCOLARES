@@ -1,3 +1,5 @@
+from pickle import dump, load
+
 cor_do_terminal = "\033[1;92;47m"  # 1=Negrito, 92=Verde Claro, 47=Fundo Branco
 reset = "\033[0m"
 
@@ -9,8 +11,9 @@ alunos = {'111' : ['Péricles Rafael', '16/09/2009', 'pericles@gmail.com'],
           '222' : ['Pedro', '17/04/2017', 'pedro@gmail.com']}
 
 
-serie = {'1ano' : {'professores' : [professores['Orlanildo']], 'alunos' : [['Péricles Rafael', '16/09/2009', 'pericles@gmail.com'],['Pedro', '17/04/2017', 'pedro@gmail.com']], 'horarios': [['13:00','Segunda', 'História']], 'capacidade': ['30 alunos'], 'sala':['A1']},
-                   '2ano' : {'professores' : [professores['Orlanildo']], 'alunos' : [['Pedro', '17/04/2017', 'pedro@gmail.com']], 'horarios': [['13:00','Segunda', 'História'], ['14:00', 'Terça', 'Português'], ['14:55', 'Segunda', 'Português']], 'capacidade': ['45 alunos'], 'sala':['A2']}}
+serie = {'1ano' : {'professores' : [['Orlanildo', 'orlanildo@gmail.com', 'Português']], 'alunos' : [['Péricles Rafael', '16/09/2009', 'pericles@gmail.com'],['Pedro', '17/04/2017', 'pedro@gmail.com']], 'horarios': [['13:00','Segunda', 'História']], 'capacidade': ['30 alunos'], 'sala':['A1']},
+                   '2ano' : {'professores' : [['Orlanildo', 'orlanildo@gmail.com', 'Português'],['Cleilson','cleilson@gmail.com', 'Ciências']], 'alunos' : [['Pedro', '17/04/2017', 'pedro@gmail.com']], 'horarios': [['13:00','Segunda', 'História'], ['14:00', 'Terça', 'Português'], ['14:55', 'Segunda', 'Português']], 'capacidade': ['45 alunos'], 'sala':['A2']}}
+
 
 opcao = ''
 while opcao != 0: 
@@ -54,36 +57,61 @@ while opcao != 0:
         opcao2 = int(input("\tDigite a opção que deseja acessar: "))
         
         if opcao2 == 1:
+            try:
+                Arqprofessores = open('professores.txt', 'rb')
+                serie = load(Arqprofessores)
+                Arqprofessores.close()
+            except:
+                Arqprofessores = open('professores.txt', 'wb')
+                Arqprofessores.close()
+
             print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
             print(cor_do_terminal+"║                                                                            ║"+reset)
             print(cor_do_terminal+"║                           CADASTRO DO PROFESSOR                            ║"+reset)
             print(cor_do_terminal+"║                                                                            ║"+reset)
             print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
 
-            nome = input("\tDigite o nome do professor: ")    
+            nome = input("\tDigite o nome do professor: ").strip().title()    
             print()
-            data_nasc = input('\tDigite a sua data de nascimento(xx/xx/xxxx): ')
+            data_nasc = input('\tDigite a sua data de nascimento(xx/xx/xxxx): ').strip()
             print()
-            telefone = input('\tDigite o seu telefone para contato: ')
+            telefone = input('\tDigite o seu telefone para contato: ').strip()
             print()
-            email = input("\tDigite o email do professor: ")
+            email = input("\tDigite o email do professor: ").strip()
             print()
-            disciplina = input("\tDigite a disciplina que irá lecionar: ")
+            disciplina = input("\tDigite a disciplina que irá lecionar: ").strip().title()
             print()
+
             qntd_turmas = int(input('\tDigite quantas turmas irá lecionar: '))
 
             professores[nome] = [nome, data_nasc, telefone, email, disciplina]
+
+            Arq_professores = open('Professores.txt', 'wb')
+            dump(professores,Arqprofessores)
+            Arqprofessores.close()
+            
+            try:
+                Arq_series = open('series.txt', 'rb')
+                serie = load(Arq_series)
+                Arq_series.close()
+            except:
+                Arq_series = open('series.txt', 'wb')
+                Arq_series.close()
+
             for j in range(qntd_turmas):
                 turma = input('\tDigite a turma: ')
                 if turma in serie:
                     serie[turma]['professores'].append(professores[nome])
                     print()
-                    print('\tEssa é a lista de profesores do {}: {}'.format(turma, serie[turma]['professores']))
+
                 else: 
                     print('\tNão temos o {} cadastrado nas turmas'.format(turma))
+            Arq_series = open('series.txt', 'wb')
+            dump(serie, Arq_series)
+            Arq_series.close()        
+
             
-            print()
-            print()
+            print('\tEssa é a lista de profesores do {}: {}'.format(turma, serie[turma]['professores']))
             print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
             print(cor_do_terminal+"║                                                                            ║"+reset)
             print(cor_do_terminal+"║                           CADASTRO CONCLUÍDO                               ║"+reset)
@@ -95,6 +123,9 @@ while opcao != 0:
             print(cor_do_terminal+"║                                                                            ║"+reset)
             print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
             input("\tAPERTE >ENTER< PARA CONTINUAR ")
+            
+            
+            
 
         elif opcao2 == 2:
             print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
@@ -102,36 +133,52 @@ while opcao != 0:
             print(cor_do_terminal+"║                           CADASTRO DE HORÁRIOS                             ║"+reset)
             print(cor_do_terminal+"║                                                                            ║"+reset)
             print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
-      
-            nome_professor = input('\tDigite o nome do professor: ').strip()
+
+            nome_professor = input('\tDigite o nome do professor: ').strip().title()
             print()
             turma = input("\tDigite a turma da aula: ").strip()
             print()
-            materia = input('\tDigite a matéria que será lecionada: ').strip()
+            materia = input('\tDigite a matéria que será lecionada: ').strip().title()
             print()
-            dia = input('\tDigite o dia da aula: ').strip()
+            dia = input('\tDigite o dia da aula: ').strip().title()
             print()
-            horario = input("\tDigite o horário de começo da aula: ")
+            horario = input("\tDigite o horário de começo da aula: ").strip()
             print()
-           
+            
+            try:
+                Arq_series = open('series.txt', 'rb')
+                serie = load(Arq_series)
+                Arq_series.close()
+            except:
+                Arq_series = open('series.txt', 'wb')
+                Arq_series.close()
+
             if nome_professor in professores:
                 if turma in serie:
-                    if nome_professor in serie[turma]['professores']:
-                        serie[turma]['horarios'].append([ horario, dia, materia])
-                        serie[turma]['horarios'].sort()
-                        print('Horários do {}: {}'.format(turma, serie[turma]['horarios']))
-                        input("\tAPERTE >ENTER< PARA CONTINUAR ")
-                        print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
-                        print(cor_do_terminal+"║                                                                            ║"+reset)
-                        print(cor_do_terminal+"║                      CADASTRO DE HORÁRIOS CONCLUÍDO                        ║"+reset)
-                        print(cor_do_terminal+"║                                                                            ║"+reset)
-                        print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
-                        print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
-                        print(cor_do_terminal+"║                                                                            ║"+reset)
-                        print(cor_do_terminal+"║                 \u26A0 Atenção! Isso é apenas uma simulação!                    ║"+reset)
-                        print(cor_do_terminal+"║                                                                            ║"+reset)
-                        print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
-                        input("\tAPERTE >ENTER< PARA CONTINUAR ")
+                    qntd_prof = len(serie[turma]['professores'])
+                    
+                    for i in range(qntd_prof):
+                        
+                        if nome_professor in serie[turma]['professores'][i]:
+                            serie[turma]['horarios'].append([ horario, dia, materia])
+                            serie[turma]['horarios'].sort()
+                            print('Horários do {}: {}'.format(turma, serie[turma]['horarios']))
+
+                            Arq_series = open('series.txt', 'wb')
+                            dump(serie, Arq_series)
+                            Arq_series.close()
+
+                            print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
+                            print(cor_do_terminal+"║                                                                            ║"+reset)
+                            print(cor_do_terminal+"║                      CADASTRO DE HORÁRIOS CONCLUÍDO                        ║"+reset)
+                            print(cor_do_terminal+"║                                                                            ║"+reset)
+                            print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
+                            print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
+                            print(cor_do_terminal+"║                                                                            ║"+reset)
+                            print(cor_do_terminal+"║                 \u26A0 Atenção! Isso é apenas uma simulação!                    ║"+reset)
+                            print(cor_do_terminal+"║                                                                            ║"+reset)
+                            print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
+                            input("\tAPERTE >ENTER< PARA CONTINUAR ")
 
                     else:
                         print('\tO professor não está cadastrado na turma')
@@ -151,19 +198,35 @@ while opcao != 0:
             print(cor_do_terminal+"║                           EXCLUSÃO DE HORÁRIOS                             ║"+reset)
             print(cor_do_terminal+"║                                                                            ║"+reset)
             print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
-            nome_professor = input('\tDigite o nome do professor: ').strip()
+            nome_professor = input('\tDigite o nome do professor: ').strip().title()
             print()
             turma = input("\tDigite a turma da aula: ").strip()
             print()
-            disciplina = input("\tDigite o nome da disciplina: ").strip()
+            disciplina = input("\tDigite o nome da disciplina: ").strip().title()
             print()
             horario = input("\tDigite o horário que a aula iria começar: ").strip()
             print()
+
+            try:
+                Arq_series = open('series.txt', 'rb')
+                serie = load(Arq_series)
+                Arq_series.close()
+            except:
+                Arq_series = open('series.txt', 'wb')
+                Arq_series.close()
+
             if turma in serie:
+
                 for aula in serie[turma]['horarios']:
+
                     if aula[0] == horario and aula[2] == disciplina:
                         serie[turma]['horarios'].remove(aula)
-                        print(serie)
+                        print(f'Essas são as aulas da turma: {serie[turma]['horarios']}')
+
+                        Arq_series = open('series.txt', 'wb')
+                        dump(serie, Arq_series)
+                        Arq_series.close() 
+                        
                         print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
                         print(cor_do_terminal+"║                                                                            ║"+reset)
                         print(cor_do_terminal+"║                        EXCLUSÃO DE HORÁRIOS CONCLUÍDA                      ║"+reset)
@@ -176,6 +239,7 @@ while opcao != 0:
                         print(cor_do_terminal+"║                                                                            ║"+reset)
                         print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
                         input("\tAPERTE >ENTER< PARA CONTINUAR ")
+
 
                 print('\tNão tem essa disciplina e horário cadastrada na turma')
                 input("\tAPERTE >ENTER< PARA CONTINUAR ")
@@ -191,32 +255,42 @@ while opcao != 0:
             print(cor_do_terminal+"║                                                                            ║"+reset)
             print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
             
-            nome_professor = input('\tDigite o nome do professor: ').strip()
+            nome_professor = input('\tDigite o nome do professor: ').strip().title()
             print()
-            disciplina = input("\tDigite a disciplina: ").strip()
+            disciplina = input("\tDigite a disciplina: ").strip().title()
             print()
+
+            Arq_series = open('series.txt', 'rb')
+            serie = load(Arq_series)
+            Arq_series.close()
+
+            turma_encontrada = False
+
             for chave, dados_serie in serie.items():
                 for professor in dados_serie['professores']:
                     if professor[0] == nome_professor and professor[-1] == disciplina:
-                        print('Essa é sua turma: {}'.format(chave))
+                        print('\tEssa é sua turma: {}'.format(chave))
                         print()
-                        print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
-                        print(cor_do_terminal+"║                                                                            ║"+reset)
-                        print(cor_do_terminal+"║                     VERIFICAÇÃO DE TURMAS CONCLUÍDA                      ║"+reset)
-                        print(cor_do_terminal+"║                                                                            ║"+reset)
-                        print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
+                        turma_encontrada = True
                         
-                        print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
-                        print(cor_do_terminal+"║                                                                            ║"+reset)
-                        print(cor_do_terminal+"║                 \u26A0 Atenção! Isso é apenas uma simulação!                    ║"+reset)
-                        print(cor_do_terminal+"║                                                                            ║"+reset)
-                        print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
-                        print()
-                        input("\tAPERTE >ENTER< PARA CONTINUAR ")
-                else:
-                    print('\tO professor não está cadastrado em nenhuma turma')    
-                    input("\tAPERTE >ENTER< PARA CONTINUAR ")
-
+                
+            if not turma_encontrada:
+                print('\tO professor não está cadastrado em nenhuma turma')    
+                
+            print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
+            print(cor_do_terminal+"║                                                                            ║"+reset)
+            print(cor_do_terminal+"║                     VERIFICAÇÃO DE TURMAS CONCLUÍDA                        ║"+reset)
+            print(cor_do_terminal+"║                                                                            ║"+reset)
+            print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
+                            
+            print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
+            print(cor_do_terminal+"║                                                                            ║"+reset)
+            print(cor_do_terminal+"║                 \u26A0 Atenção! Isso é apenas uma simulação!                    ║"+reset)
+            print(cor_do_terminal+"║                                                                            ║"+reset)
+            print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
+            print()
+            input("\tAPERTE >ENTER< PARA CONTINUAR ")
+            
            
 
         else:
@@ -267,15 +341,25 @@ while opcao != 0:
 
             if matricula not in alunos:
                 alunos[matricula] = [nome_aluno, data_nasc, email]
-                print('Esses são os alunos cadastrados: {}'.format(alunos))
+                print('\tEsses são os alunos cadastrados: {}'.format(alunos))
+
+                Arq_alunos = open('Alunos.txt','wb')
+                dump(alunos,Arq_alunos)
+                Arq_alunos.close()
 
                 if turma in serie:
                     qntd_alunos = len(serie[turma]['alunos'])
+
                     for i in range (qntd_alunos):
                         if nome_aluno != serie[turma]['alunos'][i][0]:
                             serie[turma]['alunos'].append([nome_aluno, data_nasc, email])
                             print()
-                            print(serie[turma]['alunos'])
+                            print('\tEsses são os alunos do {}: {}'.format(turma,serie[turma]['alunos']))
+
+                            Arq_series = open('series.txt', 'wb')
+                            dump(serie, Arq_series)
+                            Arq_series.close()
+
                             print()
                             print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
                             print(cor_do_terminal+"║                                                                            ║"+reset)
@@ -318,17 +402,26 @@ while opcao != 0:
                     
                     for i in range (qntd_alunos):
                         if alunos[matricula][0] in serie[turma]['alunos'][i]:
-                            novo_nome = input('\tDigite o novo nome do aluno: ').strip()
+                            novo_nome = input('\tDigite o novo nome do aluno: ').strip().title()
                             data_nas = input('\tDigite a nova data de nascimento(xx/xx/xxxx): ').strip()
                             email = input('\tDigite o novo email do aluno: ').strip()
 
                             alunos[matricula] = [novo_nome, data_nas, email]
+
+                            Arq_alunos = open('Alunos.txt', 'wb')
+                            dump(alunos, Arq_alunos)
+                            Arq_alunos.close()
+
                             serie[turma]['alunos'][i] = alunos[matricula]
-                            serie[turma]
+
+                            Arq_series = open('series.txt', 'wb')
+                            dump(serie, Arq_series)
+                            Arq_series.close()
 
                             print()
-                            print(alunos)
-                            print(serie[turma]['alunos'][i])
+                            print('\tTodos os dados dos alunos: {}'.format(alunos))
+                            print()
+                            print('\tDados do aluno atuzalizado na turma: {}'.format(serie[turma]['alunos'][i]))
                             print()
                             print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
                             print(cor_do_terminal+"║                                                                            ║"+reset)
@@ -373,10 +466,20 @@ while opcao != 0:
                         if nome_aluno in serie[turma]['alunos'][i]:
                             del alunos[matricula]
                             print('\tAlunos da escola: {}'.format(alunos))  
+
+                            Arq_alunos = open('Alunos.txt', 'wb')
+                            dump(alunos, Arq_alunos)
+                            Arq_alunos.close()
+
+
                             del serie[turma]['alunos'][i]
                             print('\tAlunos do {}: {}'.format(turma, serie[turma]['alunos']))
-                            print()
 
+                            Arq_series = open('series.txt', 'wb')
+                            dump(serie, Arq_series)
+                            Arq_series.close()
+
+                            print()
                             print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
                             print(cor_do_terminal+"║                                                                            ║"+reset)
                             print(cor_do_terminal+"║                         EXCLUSÃO DE ALUNO CONCLUÍDA                        ║"+reset)
@@ -407,25 +510,45 @@ while opcao != 0:
             print(cor_do_terminal+"║                                                                            ║"+reset)
             print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
             matricula = input('\tDigite a sua matrícula: ').strip()
-            nome_aluno = input('\tDigite o seu nome: ').strip()
+            nome_aluno = input('\tDigite o seu nome: ').strip().title()
             turma = input('\tDigite a turma que você estuda: ').strip()
-            dia = input('\tDigite o dia que você quer ver a grade: ').strip()
+            dia = input('\tDigite o dia que você quer ver a grade: ').strip().title()
+
+            try:
+                Arq_series = open('series.txt','rb')
+                load(Arq_series)
+                Arq_series.close()
+
+                Arq_alunos = open('Alunos.txt','rb')
+                load(Arq_alunos)
+                Arq_alunos.close()
+            
+            except:
+                Arq_series = open('Series.txt', 'wb')
+                Arq_series.close()
+
+                Arq_alunos = open('Alunos.txt', 'wb')
+                Arq_alunos.close()
+
             if matricula in alunos:
                 nome_valido = alunos[matricula][0]
                 lista_alunos = serie[turma]['alunos']
                 tam_lista_alunos = len(lista_alunos)
+
                 for j in range(tam_lista_alunos):
-                    if lista_alunos[j][0] == nome_aluno:
-                        if nome_aluno == nome_valido:
-                            lista_horarios = serie[turma]['horarios']
-                            tam = len(lista_horarios)
-                            for i in range(tam):
-                                if lista_horarios[i][1] == dia:
-                                    print()
-                                    print(f'\tDia: {lista_horarios[i][1]}')
-                                    print(f'\tMatéria: {lista_horarios[i][2]}')
-                                    print(f'\tHorário: {lista_horarios[i][0]}')
-                                    print()
+
+                    if lista_alunos[j][0] == nome_valido:
+                        lista_horarios = serie[turma]['horarios']
+                        tam = len(lista_horarios)
+                   
+                        for i in range(tam):
+                   
+                            if lista_horarios[i][1] == dia:
+                                print()
+                                print(f'\tDia: {lista_horarios[i][1]}')
+                                print(f'\tMatéria: {lista_horarios[i][2]}')
+                                print(f'\tHorário: {lista_horarios[i][0]}')
+                                print()
                                 input("\tAPERTE >ENTER< PARA CONTINUAR ")
                     else:
                         print()
@@ -475,26 +598,67 @@ while opcao != 0:
             turma = input('\tDigite o nome da turma: ').strip()
             sala = input('\tDigite a sala da turma: ').strip()
             capacidade = input('\tDigite a capacidade da turma: ').strip()
+
+            Arq_series = open('series.txt', 'rb')
+            serie = load(Arq_series)
+            Arq_series.close()
+
             if turma not in serie:
                 serie[turma] = {'professores': [], 'alunos': [], 'horários': [], 'capacidade': [capacidade], 'sala': [sala]}
-                print('\tTurma cadastrada com sucesso')
-                print(serie)
+
+                Arq_series = open('series.txt', 'wb')
+                dump(serie, Arq_series)
+                Arq_series.close()
+
+                print('Essas são as turmas atualizadas: {}'.format(serie))
+                print()
+                print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
+                print(cor_do_terminal+"║                                                                            ║"+reset)
+                print(cor_do_terminal+"║                         TURMA CRIADA COM SUCESSO                           ║"+reset)
+                print(cor_do_terminal+"║                                                                            ║"+reset)                
+                print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
+                print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
+                print(cor_do_terminal+"║                                                                            ║"+reset)
+                print(cor_do_terminal+"║                 \u26A0 Atenção! Isso é apenas uma simulação!                    ║"+reset)
+                print(cor_do_terminal+"║                                                                            ║"+reset)
+                print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
                 input("\tAPERTE >ENTER< PARA CONTINUAR ")
+
             else:
                 print('\tEssa turma já existe')
                 input("\tAPERTE >ENTER< PARA CONTINUAR ")
+
         elif opcao2 == 2:
             print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
             print(cor_do_terminal+"║                                                                            ║"+reset)
             print(cor_do_terminal+"║                            LISTA DE TURMAS, SALAS E CAPACIDADE             ║"+reset)
             print(cor_do_terminal+"║                                                                            ║"+reset)
             print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
+
+            try:
+                Arq_series = open('series.txt', 'rb')
+                serie = load(Arq_series)
+                Arq_series.close()
+            except:
+                Arq_series = open('series.txt', 'wb')
+                Arq_series.close()
+
             for chave in serie:
                 print(f'\tEssa é a série: {chave}')
                 print(f'\tEssa é a sala da série: {serie[chave]['sala']}')
                 print(f'\tEssa é a capacidade da sala: {serie[chave]['capacidade']}')
                 print()
-            input("\tAPERTE >ENTER< PARA CONTINUAR ")
+            print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
+            print(cor_do_terminal+"║                                                                            ║"+reset)
+            print(cor_do_terminal+"║                       TURMAS LISTADAS COM SUCESSO                          ║"+reset)
+            print(cor_do_terminal+"║                                                                            ║"+reset)                
+            print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
+            print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
+            print(cor_do_terminal+"║                                                                            ║"+reset)
+            print(cor_do_terminal+"║                 \u26A0 Atenção! Isso é apenas uma simulação!                    ║"+reset)
+            print(cor_do_terminal+"║                                                                            ║"+reset)
+            print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
+            input("\tAPERTE >ENTER< PARA CONTINUAR ")           
 
         elif opcao2 == 3:
             print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
@@ -507,14 +671,38 @@ while opcao != 0:
             print(cor_do_terminal+"║                                                                            ║"+reset)
             print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
             opcao3 = int(input("\tDigite a opção que deseja acessar: "))
+
+            try:
+                Arq_series = open('series.txt', 'rb')
+                serie = load(Arq_series)
+                Arq_series.close()
+            except:
+                Arq_series = open('series.txt', 'wb')
+                Arq_series.close()
+
             if opcao3 == 1:
                 turma = input('\tDigite a turma que deseja alterar a capacidade: ').strip()
+
                 if turma in serie:
                     nova_capacidade = input('\tDigite a nova capacidade: ').strip()
                     serie[turma]['capacidade'] = [nova_capacidade]
-                    print('\tCapacidade alterada com sucesso')
-                    print()
+
+                    Arq_series = open('series.txt', 'wb')
+                    serie = load(Arq_series)
+                    Arq_series.close()
+
                     print(f'\tNova capacidade: {serie[turma]['capacidade']}')
+                    print()
+                    print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
+                    print(cor_do_terminal+"║                                                                            ║"+reset)
+                    print(cor_do_terminal+"║                     ALTERAÇÃO DA CAPACIDADE CONCLUÍDA                      ║"+reset)
+                    print(cor_do_terminal+"║                                                                            ║"+reset)                
+                    print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
+                    print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
+                    print(cor_do_terminal+"║                                                                            ║"+reset)
+                    print(cor_do_terminal+"║                 \u26A0 Atenção! Isso é apenas uma simulação!                    ║"+reset)
+                    print(cor_do_terminal+"║                                                                            ║"+reset)
+                    print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
                     input("\tAPERTE >ENTER< PARA CONTINUAR ")
                 else:
                     print('\tEssa turma não está cadastrada')
@@ -526,9 +714,22 @@ while opcao != 0:
                 if turma in serie:
                     nova_sala = input('\tDigite a nova sala: ').strip()
                     serie[turma]['sala'] = [nova_sala]
-                    print('\tSala alterada com sucesso')
-                    print()
+                    
+                    Arq_series = open('series.txt', 'wb')
+                    dump(serie, Arq_series)
+                    Arq_series.close()
+
                     print(f'\tEssa é a nova sala de aula: {serie[turma]['sala']} ')
+                    print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
+                    print(cor_do_terminal+"║                                                                            ║"+reset)
+                    print(cor_do_terminal+"║                       ALTERAÇÃO DE SALA CONCLUÍDA                          ║"+reset)
+                    print(cor_do_terminal+"║                                                                            ║"+reset)                
+                    print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
+                    print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
+                    print(cor_do_terminal+"║                                                                            ║"+reset)
+                    print(cor_do_terminal+"║                 \u26A0 Atenção! Isso é apenas uma simulação!                    ║"+reset)
+                    print(cor_do_terminal+"║                                                                            ║"+reset)
+                    print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
                     input("\tAPERTE >ENTER< PARA CONTINUAR ")
 
                 else:
@@ -554,12 +755,31 @@ while opcao != 0:
             print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
             turma = input('\tDigite a turma que deseja remover: ').strip()
 
+            Arq_series = open('series.txt', 'rb')
+            serie = load(Arq_series)
+            Arq_series.close()
+            print()
+
             if turma in serie:
                 del serie[turma]
-                print('\tTurma removida com sucesso')
-                print()
-                print(serie)  
-                input("\tAPERTE >ENTER< PARA CONTINUAR ")
+                
+                Arq_series = open('series.txt', 'wb')
+                dump(serie, Arq_series)
+                Arq_series.close()
+                for chave in serie:
+                    print('Essas são as turmas atualizadas: {}'.format(serie))  
+                    print()
+                print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
+                print(cor_do_terminal+"║                                                                            ║"+reset)
+                print(cor_do_terminal+"║                       REMOÇÃO DE TURMA CONCLUÍDA                           ║"+reset)
+                print(cor_do_terminal+"║                                                                            ║"+reset)                
+                print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
+                print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
+                print(cor_do_terminal+"║                                                                            ║"+reset)
+                print(cor_do_terminal+"║                 \u26A0 Atenção! Isso é apenas uma simulação!                    ║"+reset)
+                print(cor_do_terminal+"║                                                                            ║"+reset)
+                print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
+                input("\tAPERTE >ENTER< PARA CONTINUAR ")    
 
             else:
                 print('\tTurma não existente')
