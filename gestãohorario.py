@@ -1,4 +1,7 @@
 from pickle import dump, load
+from validacao_email import verificacao
+from validacao_telefone import validacao
+from validacao_data_nasc import certification
 
 cor_do_terminal = "\033[1;92;47m"  # 1=Negrito, 92=Verde Claro, 47=Fundo Branco
 reset = "\033[0m"
@@ -73,12 +76,36 @@ while opcao != 0:
 
             nome = input("\tDigite o nome do professor: ").strip().title()    
             print()
-            data_nasc = input('\tDigite a sua data de nascimento(xx/xx/xxxx): ').strip()
-            print()
-            telefone = input('\tDigite o seu telefone para contato: ').strip()
-            print()
-            email = input("\tDigite o email do professor: ").strip()
-            print()
+
+            while True:
+                data_nasc = input('\tDigite a sua data de nascimento(xx/xx/xxxx): ').strip()
+                print()
+                if verification == True:
+                    break
+                else:
+                    print('[Error] Data inválida!')
+                    input("\tAPERTE >ENTER< PARA CONTINUAR ")
+
+            while True:
+                telefone = input('\tDigite o seu telefone para contato: ').strip()
+                print()
+                if validacao(telefone) == True:
+                    break
+                else:
+                    print('\t[Error] Telefone inválido')
+                    input("\tAPERTE >ENTER< PARA CONTINUAR ")
+                    print()
+
+            while True:
+                email = input("\tDigite o email do professor: ").strip()
+                print()
+                if verificacao(email) == True:
+                    break
+                else:
+                    print('\t[Error] Email inválido. Digite um email com @ e um domíno válido, como .com')
+                    input("\tAPERTE >ENTER< PARA CONTINUAR ")
+                    print()
+
             disciplina = input("\tDigite a disciplina que irá lecionar: ").strip().title()
             print()
 
@@ -332,10 +359,25 @@ while opcao != 0:
             print()
             nome_aluno = input('\tDigite o nome do aluno: ').title().strip()
             print()
-            data_nasc = input('\tDigite a data de nascimento do aluno(xx/xx/xxxx): ').strip()
-            print()
-            email = input('\tDigite o email do aluno: ').strip()
-            print()
+            
+            while True:
+                data_nasc = input('\tDigite a data de nascimento do aluno(xx/xx/xxxx): ').strip()
+                print()
+                if certification(data_nasc) == True:
+                    break
+                else:
+                    print('\t[Error] Data de nascimento inválida')
+                    input("\tAPERTE >ENTER< PARA CONTINUAR ")
+
+            while True:        
+                email = input('\tDigite o email do aluno: ').strip()
+                print()
+                if verificacao(email) == True:
+                    break
+                else:
+                    print('\t[Error] Email inválido')
+                    input("\tAPERTE >ENTER< PARA CONTINUAR ")
+
             turma = input('\tDigite a turma que vai cursar: ').strip()
             print()
 
@@ -434,8 +476,23 @@ while opcao != 0:
                     for i in range (qntd_alunos):
                         if alunos[matricula][0] in serie[turma]['alunos'][i]:
                             novo_nome = input('\tDigite o novo nome do aluno: ').strip().title()
-                            data_nas = input('\tDigite a nova data de nascimento(xx/xx/xxxx): ').strip()
-                            email = input('\tDigite o novo email do aluno: ').strip()
+                            while True:
+                                data_nas = input('\tDigite a nova data de nascimento(xx/xx/xxxx): ').strip()
+                                if certification(data_nas) == True:
+                                    break
+                                else:
+                                    print('\t[Error] Data de nascimento inválida')
+                                    input("\tAPERTE >ENTER< PARA CONTINUAR ")
+
+                            while True:           
+                                email = input('\tDigite o novo email do aluno: ').strip()
+                                print()
+                                if verificacao(email) == True:
+                                    break
+                                else:
+                                    print('\t[Error] Email inválido')
+                                    input("\tAPERTE >ENTER< PARA CONTINUAR ")
+
 
                             alunos[matricula] = [novo_nome, data_nas, email]
 
