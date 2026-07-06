@@ -1,7 +1,13 @@
 from datetime import datetime
 
 def certification(data_nas):
-  data_div = data_nas.split('/')
+  try:
+    data_div = data_nas.split('/')
+    if data_nas.count('/') < 2 or data_nas.count('/') > 2:
+      return False
+  except:
+    return False
+  
   data_int = [int(data) for data in data_div]
   if data_int[2] >= datetime.now().year: 
     return False
@@ -42,9 +48,9 @@ def certification(data_nas):
 
     elif data_int[1] == 12 and (data_int[0] >= 1 and data_int[0] <= 31):
       return True
-
     else:
       return False
+
 
   else:
     if data_int[1] == 1 and (data_int[0] >= 1 and data_int[0] <= 31):

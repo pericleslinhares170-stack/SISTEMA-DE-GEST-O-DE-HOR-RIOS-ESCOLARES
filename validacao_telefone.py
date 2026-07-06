@@ -8,4 +8,3 @@ def validacao(telefone):
         return False
     else:
         return True
-                
