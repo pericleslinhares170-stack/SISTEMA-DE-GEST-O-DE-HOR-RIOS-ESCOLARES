@@ -1,6 +1,7 @@
 from pickle import dump, load
 cor_do_terminal = "\033[1;92;47m"  # 1=Negrito, 92=Verde Claro, 47=Fundo Branco
 reset = "\033[0m"
+
 def option_relatory(serie, professores, alunos):
         try:
                 Arq_series = open('series.txt', 'rb')
@@ -36,6 +37,10 @@ def option_relatory(serie, professores, alunos):
         print(cor_do_terminal+"║   [1] Capacidade Restante da Turma                                         ║"+reset)
         print(cor_do_terminal+"║                                                                            ║"+reset)
         print(cor_do_terminal+"║   [2] Choque de Horários                                                   ║"+reset)
+        print(cor_do_terminal+"║                                                                            ║"+reset)
+        print(cor_do_terminal+"║   [3] Lista de Professores                                                 ║"+reset)
+        print(cor_do_terminal+"║                                                                            ║"+reset)
+        print(cor_do_terminal+"║   [4] Lista de Alunos                                                      ║"+reset)
         print(cor_do_terminal+"║                                                                            ║"+reset)
         print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
         opcao2 = int(input("\tDigite a opção que deseja acessar: "))
@@ -144,4 +149,68 @@ def option_relatory(serie, professores, alunos):
                     elif soma_horarios > 1:
                         print('\tVocê apresenta choque de horários')
                         input("\tAPERTE >ENTER< PARA PULAR ")
-                    
+        
+        elif opcao2 == 3:
+            print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
+            print(cor_do_terminal+"║                                                                            ║"+reset)
+            print(cor_do_terminal+"║                          LISTA DE PROFESSORES                              ║"+reset)
+            print(cor_do_terminal+"║                                                                            ║"+reset)
+            print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
+            print()
+
+            for chave in professores:
+                print('\tNome do professor: {}'.format(professores[chave][0]))
+                print('\tData de nascimento: {}'.format(professores[chave][1]))
+                print('\tTelefone: {}'.format(professores[chave][2]))
+                print('\tEmail: {}'.format(professores[chave][3]))
+                print('\tDisciplina: {}'.format(professores[chave][-1]))
+                print()
+
+            print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
+            print(cor_do_terminal+"║                                                                            ║"+reset)
+            print(cor_do_terminal+"║                            RELATÓRIO CONCLUÍDO                             ║"+reset)
+            print(cor_do_terminal+"║                                                                            ║"+reset)                
+            print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
+            print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
+            print(cor_do_terminal+"║                                                                            ║"+reset)
+            print(cor_do_terminal+"║                 \u26A0 Atenção! Isso é apenas uma simulação!                    ║"+reset)
+            print(cor_do_terminal+"║                                                                            ║"+reset)
+            print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
+            input("\tAPERTE >ENTER< PARA CONTINUAR ")
+        
+        elif opcao2 == 4:
+            print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
+            print(cor_do_terminal+"║                                                                            ║"+reset)
+            print(cor_do_terminal+"║                             LISTA DE ALUNOS                                ║"+reset)
+            print(cor_do_terminal+"║                                                                            ║"+reset)
+            print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
+            print()
+            for chave in alunos:
+                 print('\tNome do aluno: {}'.format(alunos[chave][0]))
+                 print('\tData de nascimento: {}'.format(alunos[chave][1]))
+                 print('\tEmail: {}'.format(alunos[chave][-1]))
+                 print()
+            print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
+            print(cor_do_terminal+"║                                                                            ║"+reset)
+            print(cor_do_terminal+"║                            RELATÓRIO CONCLUÍDO                             ║"+reset)
+            print(cor_do_terminal+"║                                                                            ║"+reset)                
+            print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
+            print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
+            print(cor_do_terminal+"║                                                                            ║"+reset)
+            print(cor_do_terminal+"║                 \u26A0 Atenção! Isso é apenas uma simulação!                    ║"+reset)
+            print(cor_do_terminal+"║                                                                            ║"+reset)
+            print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
+            input("\tAPERTE >ENTER< PARA CONTINUAR ")
+
+        else:
+            print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
+            print(cor_do_terminal+"║                                                                            ║"+reset)
+            print(cor_do_terminal+"║                             OPÇÃO INEXISTENTE                              ║"+reset)
+            print(cor_do_terminal+"║                                                                            ║"+reset)
+            print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
+            print(cor_do_terminal+"╔════════════════════════════════════════════════════════════════════════════╗"+reset)
+            print(cor_do_terminal+"║                                                                            ║"+reset)
+            print(cor_do_terminal+"║                 \U0001F6A9 VOLTE AO MENU PRINCIPAL E REFAÇA A OPERAÇÃO             ║"+reset)
+            print(cor_do_terminal+"║                                                                            ║"+reset)
+            print(cor_do_terminal+"╚════════════════════════════════════════════════════════════════════════════╝"+reset)
+            input("\tAPERTE >ENTER< PARA PULAR ")

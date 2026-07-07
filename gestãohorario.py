@@ -17,8 +17,8 @@ from relatorio import option_relatory
 cor_do_terminal = "\033[1;92;47m"  # 1=Negrito, 92=Verde Claro, 47=Fundo Branco
 reset = "\033[0m"
         
-professores = { '1001' : ['Orlanildo', 'orlanildo@gmail.com', 'Português'], 
-                '1002' : ['Cleilson','cleilson@gmail.com', 'Ciências']}
+professores = { '1001' : ['Orlanildo','17/04/19984', '83 999999999', 'orlanildo@gmail.com', 'Português'], 
+                '1002' : ['Cleilson', '28/02/1998', '84 888888888', 'cleilson@gmail.com', 'Ciências']}
 
 alunos = {'20260000' : ['Péricles Rafael', '16/09/2009', 'pericles@gmail.com'],
           '20260001' : ['Pedro', '17/04/2017', 'pedro@gmail.com']}
